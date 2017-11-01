@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.util.Scanner;
+/**
+ * 读取文件指定行数内容
+ * @author young
+ *
+ */
+public class ReadSelectedLine {
+    static void readLineVarFile(String fileName, int lineNumber)
+            throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(fileName)));
+        String line = reader.readLine().toString();
+        if (lineNumber < 0 || lineNumber > getTotalLines(fileName)) {
+            System.out.println("不在文件的行数范围之内。");
+        }
+        int num = 0;
+        while (line != null) {
+            if (lineNumber == ++num) {
+                System.out.println("line   " + lineNumber + ":   " + line);
+            }
+            line = reader.readLine();
+        }
+        reader.close();
+    }
+ 
+    // 文件内容的总行数。
+    static int getTotalLines(String fileName) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                new FileInputStream(fileName)));
+        LineNumberReader reader = new LineNumberReader(in);
+        String s = reader.readLine();
+        int lines = 0;
+        while (s != null) {
+            lines++;
+            s = reader.readLine();
+        }
+        reader.close();
+        in.close();
+        return lines;
+    }
+    public static void main(String[] args) throws IOException {
+ 
+        // 读取文件
+        String fileName = "c:\\1.java";
+ 
+        // 获取文件的内容的总行数
+        int totalNo = getTotalLines(fileName);
+        System.out.println("There are " + totalNo + " lines in the text!");
+ 
+        // 指定读取的行号,此处也可以改成自由输入
+        System.out.println("输出文件第几行内容?");
+        int lineNumber = new Scanner(System.in).nextInt();
+ 
+        // 读取指定行的内容
+        readLineVarFile(fileName, lineNumber);
+    }
+}
